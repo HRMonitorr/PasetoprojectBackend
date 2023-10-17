@@ -52,6 +52,7 @@ func GCFPasswordHasher(r *http.Request) string {
 	if err != nil {
 		resp.Message = "error parsing application/json: " + err.Error()
 	} else {
+		resp.Status = true
 		passwordhash, err := HashPass(userdata.Password)
 		if err != nil {
 			resp.Message = "Gagal Hash Passwordnya : " + err.Error()
@@ -59,6 +60,26 @@ func GCFPasswordHasher(r *http.Request) string {
 			resp.Message = "Berhasil Hash Password"
 			resp.Token = passwordhash
 		}
+	}
+	return ReturnStringStruct(resp)
+}
+
+func InsertDataUserGCF(Mongoenv, dbname string, r *http.Request) string {
+	resp := new(Credential)
+	userdata := new(User)
+	resp.Status = false
+	conn := MongoCreateConnection(Mongoenv, dbname)
+	err := json2.NewDecoder(r.Body).Decode(&userdata)
+	if err != nil {
+		resp.Message = "error parsing application/json: " + err.Error()
+	} else {
+		resp.Status = true
+		hash, err := HashPass(userdata.Password)
+		if err != nil {
+			resp.Message = "Gagal Hash Password" + err.Error()
+		}
+		InsertUserdata(conn, userdata.Username, hash)
+		resp.Message = "Berhasil Input data"
 	}
 	return ReturnStringStruct(resp)
 }

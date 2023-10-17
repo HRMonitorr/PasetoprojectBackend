@@ -1,6 +1,8 @@
 package PasetoprojectBackend
 
 import (
+	"context"
+	"fmt"
 	"github.com/aiteung/atdb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,6 +16,14 @@ func MongoCreateConnection(MongoString, dbname string) *mongo.Database {
 	}
 	conn := atdb.MongoConnect(MongoInfo)
 	return conn
+}
+
+func InsertOneDoc(db *mongo.Database, collection string, doc interface{}) (insertedID interface{}) {
+	insertResult, err := db.Collection(collection).InsertOne(context.TODO(), doc)
+	if err != nil {
+		fmt.Printf("InsertOneDoc: %v\n", err)
+	}
+	return insertResult.InsertedID
 }
 
 func GetAllUser(MongoConn *mongo.Database, colname string) []User {
@@ -32,4 +42,11 @@ func PasswordValidator(MongoConn *mongo.Database, colname string, userdata User)
 	data := atdb.GetOneDoc[User](MongoConn, colname, filter)
 	hashChecker := CompareHashPass(userdata.Password, data.Password)
 	return hashChecker
+}
+
+func InsertUserdata(MongoConn *mongo.Database, username, password string) (InsertedID interface{}) {
+	req := new(User)
+	req.Username = username
+	req.Password = password
+	return InsertOneDoc(MongoConn, "user", req)
 }
