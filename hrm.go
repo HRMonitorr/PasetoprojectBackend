@@ -52,11 +52,11 @@ func GCFPasswordHasher(r *http.Request) string {
 	if err != nil {
 		resp.Message = "error parsing application/json: " + err.Error()
 	} else {
-		resp.Status = true
 		passwordhash, err := HashPass(userdata.Password)
 		if err != nil {
 			resp.Message = "Gagal Hash Passwordnya : " + err.Error()
 		} else {
+			resp.Status = true
 			resp.Message = "Berhasil Hash Password"
 			resp.Token = passwordhash
 		}
