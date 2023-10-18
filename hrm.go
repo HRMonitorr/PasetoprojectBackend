@@ -7,10 +7,22 @@ import (
 	"os"
 )
 
-func GetDataUserFromGCF(MongoEnv, dbname, colname string) string {
+func GetDataUserFromGCF(PublicKey, Token, MongoEnv, dbname, colname string) string {
+	req := new(ResponseDataUser)
 	conn := MongoCreateConnection(MongoEnv, dbname)
-	datauser := GetAllUser(conn, colname)
-	return ReturnStringStruct(datauser)
+	checktoken := watoken.DecodeGetId(PublicKey, Token)
+	compared := CompareUsername(conn, colname, checktoken)
+	if compared != true {
+		req.Status = false
+		req.Message = "Data Username tidak ada di database"
+	} else {
+		datauser := GetAllUser(conn, colname)
+		req.Status = true
+		req.Message = "data User berhasil diambil"
+		req.Data = datauser
+	}
+
+	return ReturnStringStruct(req)
 }
 
 func ReturnStringStruct(Data any) string {

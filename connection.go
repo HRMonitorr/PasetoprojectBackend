@@ -50,3 +50,13 @@ func InsertUserdata(MongoConn *mongo.Database, username, password string) (Inser
 	req.Password = password
 	return InsertOneDoc(MongoConn, "user", req)
 }
+
+func CompareUsername(MongoConn *mongo.Database, Colname, username string) bool {
+	filter := bson.M{"username": username}
+	err := atdb.GetOneDoc[User](MongoConn, Colname, filter)
+	users := err.Username
+	if users == "" {
+		return false
+	}
+	return true
+}
