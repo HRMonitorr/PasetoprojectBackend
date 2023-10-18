@@ -21,3 +21,8 @@ type ResponseDataUser struct {
 type Response struct {
 	Token string `json:"token,omitempty" bson:"token,omitempty"`
 }
+
+type ResponseEncode struct {
+	Message string `json:"message,omitempty" bson:"message,omitempty"`
+	Token   string `json:"token,omitempty" bson:"token,omitempty"`
+}
