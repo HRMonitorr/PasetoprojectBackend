@@ -48,6 +48,7 @@ func InsertUserdata(MongoConn *mongo.Database, username, role, password string) 
 	req := new(User)
 	req.Username = username
 	req.Password = password
+	req.Role = role
 	return InsertOneDoc(MongoConn, "user", req)
 }
 
