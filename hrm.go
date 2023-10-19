@@ -96,7 +96,7 @@ func InsertDataUserGCF(Mongoenv, dbname string, r *http.Request) string {
 		if err != nil {
 			resp.Message = "Gagal Hash Password" + err.Error()
 		}
-		InsertUserdata(conn, userdata.Username, hash)
+		InsertUserdata(conn, userdata.Username, userdata.Role, hash)
 		resp.Message = "Berhasil Input data"
 	}
 	return ReturnStringStruct(resp)
