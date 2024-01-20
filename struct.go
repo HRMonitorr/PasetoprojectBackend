@@ -6,6 +6,7 @@ type User struct {
 	Username string `json:"username" bson:"username"`
 	Password string `json:"password" bson:"password"`
 	Role     string `json:"role,omitempty" bson:"role,omitempty"`
+	PhoneNum string `json:"phoneNum" bson:"phoneNum"`
 }
 
 type Credential struct {
