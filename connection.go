@@ -44,12 +44,8 @@ func PasswordValidator(MongoConn *mongo.Database, colname string, userdata User)
 	return hashChecker
 }
 
-func InsertUserdata(MongoConn *mongo.Database, username, role, password string) (InsertedID interface{}) {
-	req := new(User)
-	req.Username = username
-	req.Password = password
-	req.Role = role
-	return InsertOneDoc(MongoConn, "user", req)
+func InsertUserdata(MongoConn *mongo.Database, val User) (InsertedID interface{}) {
+	return InsertOneDoc(MongoConn, "user", val)
 }
 
 func CompareUsername(MongoConn *mongo.Database, Colname, username string) bool {
